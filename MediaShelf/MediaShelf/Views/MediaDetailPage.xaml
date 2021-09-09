@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:cc="clr-namespace:MediaShelf.CustomControls"
+             xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" xmlns:vm="clr-namespace:MediaShelf.ViewModels"
+             x:Class="MediaShelf.Views.MediaDetailPage">
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior EventName="Appearing" Command="{Binding LoadDataAsyncCommand}"/>
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <ContentView>
+            <ScrollView>
+                <StackLayout Spacing="10">
+                    <cc:ImageFit Source="{Binding TheDisplayMovie.PosterPath}"/>
+                    <pv:PancakeView BackgroundColor="RoyalBlue"
+                                    CornerRadius="20">
+                        <Label Text="{Binding TheDisplayMovie.TheMovie.Overview}"
+                           TextColor="White"
+                           FontSize="Large"
+                           Padding="20"/>
+                    </pv:PancakeView>
+                    <CollectionView ItemsSource="{Binding Cast}" HeightRequest="200">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout HorizontalItemSpacing="10" 
+                                             Orientation="Horizontal"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <pv:PancakeView BackgroundColor="RoyalBlue" CornerRadius="20" Margin="20" Padding="20"
+                                                HorizontalOptions="CenterAndExpand">
+                                    <StackLayout Spacing="10">
+                                        <Label Text="{Binding Character}" FontSize="Large" TextColor="White"/>
+                                        <Label Text="Played By:" FontSize="Large" TextColor="White"/>
+                                        <Label Text="{Binding Name}" FontSize="Large" TextColor="White"/>
+                                    </StackLayout>
+                                </pv:PancakeView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </ScrollView>
+        </ContentView>
+    </ContentPage.Content>
+</ContentPage>

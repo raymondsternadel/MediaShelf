@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MediaShelf.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:customcontrols="clr-namespace:MediaShelf.CustomControls"
+             xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             x:Class="MediaShelf.Views.MainMediaPage">
+    <ContentPage.BindingContext>
+        <vm:MainMediaViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout>
+            <SearchBar Placeholder="Search By Title" Text="{Binding SearchFieldValue}">
+                <SearchBar.Behaviors>
+                    <xct:EventToCommandBehavior EventName="TextChanged" Command="{Binding SearchMoviesCommand}"/>
+                </SearchBar.Behaviors>
+            </SearchBar>
+            <Picker SelectedItem="{Binding PickerValue}" Title="Or Choose A Filter">
+                <Picker.Behaviors>
+                    <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding PickerMovieResultsCommand}"/>
+                </Picker.Behaviors>
+                <Picker.Items>
+                    <x:String>Popular</x:String>
+                    <x:String>Top Rated</x:String>
+                    <x:String>Now Playing</x:String>
+                    <x:String>Upcoming</x:String>
+                </Picker.Items>
+            </Picker>
+            <CollectionView ItemsSource="{Binding Movies}"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadNextPageCommand}"
+                            RemainingItemsThreshold="1">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="50"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Spacing="0">
+                            <pv:PancakeView CornerRadius="20,20,0,0"
+                                            Margin="20,0,20,0">
+                                <pv:PancakeView.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"
+                                                          CommandParameter="{Binding TheMovie}"/>
+                                </pv:PancakeView.GestureRecognizers>
+                                <customcontrols:ImageFit Source="{Binding PosterPath}"/>
+                            </pv:PancakeView>
+                            <pv:PancakeView BackgroundColor="RoyalBlue"
+                                            Margin="20,0,20,0"
+                                            CornerRadius="0,0,20,20"
+                                            Padding="0,20,0,20">
+                                <StackLayout Orientation="Horizontal"
+                                             Margin="20,0,0,0">
+                                    <Label Text="Rating: "
+                                           FontSize="Large"
+                                           TextColor="White"/>
+                                    <Label Text="{Binding TheMovie.VoteAverage}"
+                                           FontSize="Large"
+                                           TextColor="White"/>
+                                </StackLayout>
+                            </pv:PancakeView>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
